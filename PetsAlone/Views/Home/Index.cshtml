@@ -1,8 +1,76 @@
-﻿@{
+﻿@model IEnumerable<Pet>
+@{
     ViewData["Title"] = "Home Page";
+    string? typeFilter = ViewContext.HttpContext.Request.Query["typeFilter"];
+    string? sortOrder = ViewContext.HttpContext.Request.Query["sortOrder"];
+    var pageNumber = ViewContext.HttpContext.Request.Query["pageNumber"].FirstOrDefault() ?? "1";
+    var totalPages = ViewData["TotalPages"] as int? ?? 1;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<h2>Missing Pets</h2>
+<form method="get" asp-controller="Home" asp-action="Index" class="form-inline mb-3">
+    <div class="form-group mr-2">
+        <label for="typeFilter">Filter by Type:</label>
+        <select id="typeFilter" name="typeFilter" class="form-control" asp-for="@typeFilter">
+            <option value="">All</option>
+            @foreach (var petType in Enum.GetValues(typeof(PetsAlone.Models.Enums.PetType)).Cast<PetsAlone.Models.Enums.PetType>())
+            {
+                <option value="@petType">@petType</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group mr-2">
+        <label for="sortOrder">Sort By:</label>
+        <select id="sortOrder" name="sortOrder" class="form-control" asp-for="@sortOrder">
+            <option value="date_desc">Date (Newest)</option>
+            <option value="date_asc">Date (Oldest)</option>
+            <option value="name_asc">Name (A-Z)</option>
+            <option value="name_desc">Name (Z-A)</option>
+        </select>
+    </div>
+
+    <div>
+        <input type="submit" value="Apply Filters" class="btn btn-primary" />
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Pet Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Date Missing</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var pet in Model)
+        {
+            <tr>
+                <td>@pet.Name</td>
+                <td>@pet.PetType</td>
+                <td>@pet.Description</td>
+                <td>@pet.DateMissing.ToShortDateString()</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    @if (totalPages > 1)
+    {
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="page-item @(i.ToString() == pageNumber ? "active" : "")">
+                        <a class="page-link" asp-controller="Home" asp-action="Index" asp-route-typeFilter="@typeFilter" asp-route-sortOrder="@sortOrder" asp-route-pageNumber="@i">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
 </div>
+
+
