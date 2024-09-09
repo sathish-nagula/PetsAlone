@@ -22,7 +22,6 @@ public class PetService : IPetService
 
     public async Task<List<Pet>> GetPetsAsync(string? typeFilter, string? sortOrder, int pageNumber, int pageSize)
     {
-        if (_pets == null) await LoadPetsAsync();
         var petsQuery = _pets.AsQueryable();
 
         if (!string.IsNullOrEmpty(typeFilter) && Enum.TryParse(typeFilter, out PetType petType))
@@ -51,8 +50,6 @@ public class PetService : IPetService
 
     public async Task<int> GetTotalPetsCountAsync(string? typeFilter)
     {
-        if (_pets == null || !_pets.Any()) await LoadPetsAsync();
-
         var petsQuery = _pets.AsQueryable();
 
         if (!string.IsNullOrEmpty(typeFilter) && Enum.TryParse(typeFilter, out PetType petType))
@@ -65,8 +62,6 @@ public class PetService : IPetService
 
     public async Task AddPetAsync(Pet pet)
     {
-        if (_pets == null || !_pets.Any()) await LoadPetsAsync();
-
         pet.Id = _pets.Any() ? _pets.Max(p => p.Id) + 1 : 1;
         pet.DateMissing = DateTime.Now;
         _pets.Add(pet);
