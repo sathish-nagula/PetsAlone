@@ -1,32 +1,27 @@
 using Microsoft.AspNetCore.Mvc;
-using PetsAlone.Models;
-using System.Diagnostics;
+using PetsAlone.ServiceContracts;
 
-namespace PetsAlone.Controllers
+namespace PetsAlone.Controllers;
+
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly IPetService _petService;
+
+    public HomeController(IPetService petService)
     {
-        private readonly ILogger<HomeController> _logger;
+        _petService = petService;
+    }
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+    public async Task<IActionResult> Index(string typeFilter, string sortOrder, int pageNumber = 1)
+    {
+        var pageSize = 10;
+        var pets = await _petService.GetPetsAsync(typeFilter, sortOrder, pageNumber, pageSize);
+        var totalPetsCount = await _petService.GetTotalPetsCountAsync(typeFilter);
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        ViewData["TotalPages"] = (int)Math.Ceiling(totalPetsCount / (double)pageSize);
+        ViewData["CurrentFilter"] = typeFilter;
+        ViewData["CurrentSort"] = sortOrder;
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        return View(pets);
     }
 }
