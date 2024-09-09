@@ -8,6 +8,11 @@
 }
 
 <h2>Missing Pets</h2>
+@if (User.Identity.IsAuthenticated)
+{
+    <a href="@Url.Action("Create", "Pet")" class="btn btn-primary mb-3">Create New Missing Pet</a>
+}
+
 <form method="get" asp-controller="Home" asp-action="Index" class="form-inline mb-3">
     <div class="form-group mr-2">
         <label for="typeFilter">Filter by Type:</label>
