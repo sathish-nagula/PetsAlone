@@ -1,7 +1,12 @@
+using PetsAlone.ServiceContracts;
+using PetsAlone.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IPetService, PetService>();
+builder.Services.AddScoped<IDataLoader, DataLoader>();
 
 var app = builder.Build();
 
