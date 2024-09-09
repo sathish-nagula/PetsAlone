@@ -7,9 +7,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A9548C77-E4F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FEDBE367-2947-4A25-A614-E8B927F19B2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetsAlone", "PetsAlone\PetsAlone.csproj", "{3174E8EB-F4E5-431D-890C-448FE053A158}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetsAlone", "PetsAlone\PetsAlone.csproj", "{3174E8EB-F4E5-431D-890C-448FE053A158}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetsAlone.Tests", "PetsAlone.Tests\PetsAlone.Tests.csproj", "{8B4EF5B0-82AF-4D50-8629-3021093610E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetsAlone.Tests", "PetsAlone.Tests\PetsAlone.Tests.csproj", "{8B4EF5B0-82AF-4D50-8629-3021093610E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
