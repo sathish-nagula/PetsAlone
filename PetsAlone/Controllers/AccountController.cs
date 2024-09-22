@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using PetsAlone.Models;
 using PetsAlone.Utils;
 using System.Security.Claims;
 
@@ -13,27 +14,50 @@ public class AccountController : Controller
         return View();
     }
 
+    //[HttpPost]
+    //public IActionResult Login(string username, string password)
+    //{
+    //    if (username == Secrets.userName && password == Secrets.password)
+    //    {
+    //        var claims = new List<Claim>
+    //    {
+    //        new Claim(ClaimTypes.Name, username)
+    //    };
+
+    //        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+    //        HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+    //        return RedirectToAction("Index", "Home");
+    //    }
+
+    //    ModelState.AddModelError("", "Invalid username or password");
+    //    return View();
+    //}
+
     [HttpPost]
-    public IActionResult Login(string username, string password)
+    public IActionResult Login(LoginViewModel model)
     {
-        if (username == Secrets.userName && password == Secrets.password)
+        if (ModelState.IsValid)
         {
-            var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, username)
-        };
+            // Replace this with actual authentication logic
+            bool loginSuccess = model.Username == Secrets.userName && model.Password == Secrets.password;
 
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
-            return RedirectToAction("Index", "Home");
+            if (loginSuccess)
+            {
+                // Redirect to the Home page or another area if login succeeds
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                // Login failed, show error message
+                ViewBag.ErrorMessage = "Invalid username or password.";
+            }
         }
 
-        ModelState.AddModelError("", "Invalid username or password");
-        return View();
+        // Return the view with model state errors or a general error message
+        return View(model);
     }
-
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

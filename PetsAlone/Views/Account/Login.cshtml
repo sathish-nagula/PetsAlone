@@ -1,19 +1,55 @@
-﻿@{
-    ViewData["Title"] = "Login";
+﻿@model LoginViewModel
+
+<div class="container">
+    <h2>Login</h2>
+    <form id="loginForm" asp-action="Login" method="post">
+        <div class="form-group">
+            <label for="Username">Username</label>
+            <input asp-for="Username" class="form-control" id="Username" />
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="Password">Password</label>
+            <input asp-for="Password" type="password" class="form-control" id="Password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+
+        <div id="error-message" class="text-danger"></div> <!-- Error message div -->
+    </form>
+</div>
+
+@section Scripts {
+    <!-- Add jQuery and jQuery Validation scripts -->
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.19.2/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#loginForm').validate({
+                rules: {
+                    Username: {
+                        required: true,
+                    },
+                    Password: {
+                        required: true
+                    }
+                },
+                messages: {
+                    Username: "Please enter your username",
+                    Password: "Please enter your password"
+                }
+            });
+
+            // Display error message from the server
+            if ('@ViewBag.ErrorMessage') {
+                $('#error-message').text('@ViewBag.ErrorMessage');
+            }
+        });
+    </script>
 }
-
-<h2>Login</h2>
-
-<form asp-action="Login" method="post">
-    <div>
-        <label>Username</label>
-        <input type="text" name="username" />
-    </div>
-    <div>
-        <label>Password</label>
-        <input type="password" name="password" />
-    </div>
-    <div>
-        <input type="submit" value="Login" />
-    </div>
-</form>
